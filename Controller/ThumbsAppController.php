@@ -33,6 +33,7 @@ class ThumbsAppController extends AppController{
 
         //Pega o primeiro item dos argumentos enviados e retira do array, no caso o tamanho (tiny,small,medium,etc)
         $size = array_shift($arguments);
+
         $this->size = $this->sizes[$this->request->params['controller']][$size];
 
         //Configura o caminho absoluto da imagem
