@@ -11,39 +11,61 @@ class ThumbsAppController extends AppController{
         'resize'=>array(
             'tiny'=>array('width'=>100,'height'=>300),
             'small'=>array('width'=>200,'height'=>300),
+            'medium'=>array('width'=>500,'height'=>500),
+            'big'=>array('width'=>1000,'height'=>1000),
         )
     );
 
-    protected $size;
-    protected $path;
-    protected $hash;
-    protected $cache_path;
+    protected $headers = array(
+        'jpg'=>"Image/jpeg",
+        'jpeg'=>"Image/jpeg",
+        'png'=>"Image/png",
+        'gif'=>"Image/gif",
+    );
 
-    public function __construct($request = null, $response = null) {
-        parent::__construct($request, $response);
+    protected $config;
 
-        //Lê o arquivo de config, caso não existir irá usar o padrão
-        $config = realpath(APP."/Config/thumbs.php");
-        if($config) $this->sizes = include($config);
+
+
+    protected function show($path){
+        $extension = pathinfo($path,PATHINFO_EXTENSION);
+        $type = $this->headers[$extension];
+        header("Content-Type: $type");
+        echo file_get_contents($path);
+        exit;
     }
 
-    public function size(){
-        //Pega todos os argumentos enviados
-        $arguments = func_get_args();
+    protected function readConfig($request){
 
-        //Pega o primeiro item dos argumentos enviados e retira do array, no caso o tamanho (tiny,small,medium,etc)
-        $size = array_shift($arguments);
+        if($request['action'] == 'fill'){
+            $fill = array_shift($request->params['pass']);
+        }
+        //GET THE SIZES AND SIZENAME
+        $sizes = realpath(APP."/Config/thumbs.php");
+        $sizes = $sizes?include($sizes):$this->sizes;
+        $sizeName = array_shift($request->params['pass']);
+        $size = @$sizes[$request['action']][$sizeName];
 
-        $this->size = $this->sizes[$this->request->params['controller']][$size];
+        //IF SIZE NOT ON LIST, ERROR!!
+        if(!$size) throw new NotFoundException(__('Tamanho não permitido'));
 
-        //Configura o caminho absoluto da imagem
-        $this->path = implode("/",$arguments);
-        $this->path = realpath(APP.WEBROOT_DIR.DS.$this->path);
+        //Get the image and thumb paths
+        $imagePath = APP.WEBROOT_DIR.DS.implode(DS,$request->params['pass']);
+        if(!file_exists($imagePath)) throw new NotFoundException(__('Imagem não encontrada'));
 
-        if(!$this->path) throw new NotFoundException(__('Imagem não encontrada'));
+        //Get the MD5 of the image
+        $md5 = md5(file_get_contents($imagePath));
 
-        pr($this->path);
-        pr($this->size);
+
+        //Return the data
+        $return = array(
+            'url'=>implode('/',$request->params['pass']),
+            'image'=> APP.WEBROOT_DIR.DS.implode(DS,$request->params['pass']),
+            'thumb'=>TMP.$request['controller'].DS.$sizeName.DS.$md5.'.'.pathinfo($imagePath,PATHINFO_EXTENSION),
+            'md5'=>$md5,
+            'size'=>$size,
+        );
+        if(!empty($fill)) $return['fill'] = $fill;
+        return $return;
     }
-
 }
