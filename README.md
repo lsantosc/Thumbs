@@ -38,6 +38,7 @@ Now youÂ´ve defined the allowed sizes you can generate your thumbs by using URLÂ
 For example if you have the image at <strong>webroot/img/someimage.jpg</strong>, you can create a crop by using the url <strong>http://www.mysite.com/thumbs/generate/crop/tiny/img/someimage.jpg</strong>. This will generate an image with tiny size (in this case 60x60) cropped from original.
 
 To understand the URL:
+
 1. http://www.mysite.com/thumbs/generate => The url for thumbs creation
 2. /crop => The thumb creation method (can also be resize or fill)
 3. /tiny => The thumb size (defined on /app/Config/thumbs.php)
