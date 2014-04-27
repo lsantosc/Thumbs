@@ -8,7 +8,8 @@ class GenerateController extends ThumbsAppController{
         parent::__construct($request, $response);
         $this->config = $this->readConfig($request);
         App::import('Vendor','Thumbs.GdImage');
-        $this->Image = new GdImage();
+        if(extension_loaded('Imagick')) App::import('Vendor','Thumbs.ImagickImage');
+        $this->Image = (class_exists('ImagickImage'))? new ImagickImage() : new GdImage();
         if(file_exists($this->config['thumb'])) $this->show($this->config['thumb']);
     }
 
