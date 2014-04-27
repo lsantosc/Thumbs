@@ -55,7 +55,12 @@ class GdImage{
 
     public function show(){
         header("Content-Type: {$this->mime}");
-        imagejpeg($this->image);
+        switch($this->mime){
+            case "image/jpeg": imagejpeg($this->image); break;
+            case "image/png": imagepng($this->image); break;
+            case "image/gif": imagegif($this->image); break;
+            default: imagepng($this->image); break;
+        }
         imagedestroy($this->image);
         exit;
     }
