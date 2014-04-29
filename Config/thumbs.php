@@ -16,6 +16,7 @@ return array(
         'medium'=>array(200,200),
     ),
     'colors'=>array(
-
+        'white'=>'FFFFFF',
+        'black'=>'000000',
     ),
 );

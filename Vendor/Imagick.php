@@ -1,5 +1,5 @@
 <?PHP
-class ImagickImage {
+class Thumbclass {
 
     private $imagick;
 
@@ -41,7 +41,8 @@ class ImagickImage {
         $this->imagick->extentimage($this->width,$this->height,($w-$this->width)/2,($h-$this->height)/2);
     }
 
-    public function show(){
+    public function show($path = false){
+        if($path) $this->load($path);
         header("Content-type: {$this->mime}");
         echo $this->imagick->getimage();
         $this->imagick->destroy();
