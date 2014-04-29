@@ -18,7 +18,7 @@ return array(
     'resize'=>array(
         'tiny'=>array('width'=>100,'height'=>300),
         'small'=>array('width'=>200,'height'=>300),
-    )
+    ),
     'fill'=>array(
         'tiny'=>array('width'=>100,'height'=>100),
         'medium'=>array('width'=>300,'height'=>300),
