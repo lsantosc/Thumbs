@@ -9,7 +9,6 @@ class GdImage{
     public function load($input){
         $this->mime = image_type_to_mime_type(exif_imagetype($input));
         $this->image = @imagecreatefromstring(file_get_contents($input));
-
         $this->width = imagesx($this->image);
         $this->height = imagesy($this->image);
     }
@@ -20,11 +19,7 @@ class GdImage{
         $this->resize($width,$height,'min');
         $sx = ($this->width/2) - ($width/2);
         $sy = ($this->height/2) - ($height/2);
-        $new = imagecreatetruecolor($width,$height);
-        $alpha = imagecolorallocatealpha($new,0,0,0,127);
-        imagesavealpha($new,true);
-        imagealphablending($new,true);
-        imagefill($new,0,0,$alpha);
+        $new = $this->create($width,$height);
         imagecopyresampled($new,$this->image,0,0,$sx,$sy,$width,$height,$width,$height);
         $this->image=$new;
         $this->width=$width;
@@ -35,11 +30,7 @@ class GdImage{
         $diff = $type=='min'?min($this->width/$width,$this->height/$height):max($this->width/$width,$this->height/$height);
         $dw = floor($this->width/$diff);
         $dh = floor($this->height/$diff);
-        $new = imagecreatetruecolor($dw,$dh);
-        $alpha = imagecolorallocatealpha($new,0,0,0,127);
-        imagesavealpha($new,true);
-        imagealphablending($new,true);
-        imagefill($new,0,0,$alpha);
+        $new = $this->create($dw,$dh);
         imagecopyresampled($new,$this->image,0,0,0,0,$dw,$dh,$this->width,$this->height);
         $this->image = $new;
         $this->width = $dw;
@@ -48,11 +39,7 @@ class GdImage{
 
     public function fill($width,$height,$fillColor){
         $this->resize($width,$height);
-        $new = imagecreatetruecolor($width,$height);
-        $alpha = imagecolorallocatealpha($new,0,0,0,127);
-        imagesavealpha($new,true);
-        imagealphablending($new,true);
-        imagefill($new,0,0,$alpha);
+        $new = $this->create($width,$height);
         $r = hexdec(substr($fillColor,0,2));
         $g = hexdec(substr($fillColor,2,2));
         $b = hexdec(substr($fillColor,4,2));
@@ -77,6 +64,16 @@ class GdImage{
         imagedestroy($this->image);
         exit;
     }
+
+    public function create($width,$height){
+        $image = imagecreatetruecolor($width,$height);
+        $alpha = imagecolorallocatealpha($image,0,0,0,127);
+        imagesavealpha($image,true);
+        imagealphablending($image,true);
+        imagefill($image,0,0,$alpha);
+        return $image;
+    }
+
     public function save($destination,$quality = 90){
         $dir = dirname($destination);
         if(!file_exists($dir)) mkdir($dir,0777,true);
