@@ -9,6 +9,8 @@ class Thumbclass{
     public function load($input){
         $this->mime = image_type_to_mime_type(exif_imagetype($input));
         $this->image = @imagecreatefromstring(file_get_contents($input));
+        imagesavealpha($this->image,true);
+        imagealphablending($this->image,true);
         $this->width = imagesx($this->image);
         $this->height = imagesy($this->image);
     }
@@ -46,11 +48,10 @@ class Thumbclass{
         $dx = ($width/2)-($this->width/2);
         $dy = ($height/2) - ($this->height/2);
         imagefill($new,0,0,$color);
-        imagecopymerge($new,$this->image,$dx,$dy,0,0,$this->width,$this->height,100);
+        imagecopyresampled($new,$this->image,$dx,$dy,0,0,$this->width,$this->height,$this->width,$this->height);
         $this->image = $new;
         $this->width = $width;
         $this->height = $height;
-        $this->show();
     }
 
     public function hexToRGB($color){
@@ -59,6 +60,24 @@ class Thumbclass{
         $b = hexdec(substr($color,4,2));
         $a = is_numeric(substr($color,7,3))?substr($color,7,3):100;
         return array('red'=>$r,'green'=>$g,'blue'=>$b,'alpha'=>$a);
+    }
+
+    public function create($width,$height){
+        imagesavealpha($this->image,true);
+        imagealphablending($this->image,true);
+        $image = imagecreatetruecolor($width,$height);
+        $alpha = imagecolorallocatealpha($image,0,0,0,127);
+        imagealphablending($image,true);
+        imagesavealpha($image,true);
+        imagefill($image,0,0,$alpha);
+        return $image;
+    }
+
+    public function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){
+        $cut = imagecreatetruecolor($src_w, $src_h);
+        imagecopy($cut, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
+        imagecopy($cut, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h);
+        imagecopymerge($dst_im, $cut, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct);
     }
 
     public function show($path = false){
@@ -72,17 +91,6 @@ class Thumbclass{
         }
         imagedestroy($this->image);
         exit;
-    }
-
-    public function create($width,$height){
-        imagesavealpha($this->image,true);
-        imagealphablending($this->image,true);
-        $image = imagecreatetruecolor($width,$height);
-        $alpha = imagecolorallocatealpha($image,0,0,0,127);
-        imagealphablending($image,true);
-        imagesavealpha($image,true);
-        imagefill($image,0,0,$alpha);
-        return $image;
     }
 
     public function save($destination,$quality = 90){
