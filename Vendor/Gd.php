@@ -69,8 +69,8 @@ class Thumbclass{
     public function create($width,$height){
         $image = imagecreatetruecolor($width,$height);
         $alpha = imagecolorallocatealpha($image,0,0,0,127);
-        imagesavealpha($image,true);
         imagealphablending($image,true);
+        imagesavealpha($image,true);
         imagefill($image,0,0,$alpha);
         return $image;
     }
