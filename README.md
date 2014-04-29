@@ -19,7 +19,7 @@ return array(
     'resize'=>array(
         'tiny'=>array(100,100), //Creates a resized imagem with 100px of maximum width or 100px of maximum height
         'small'=>array(300,300),
-    )
+    ),
     'fill'=>array(
         'tiny'=>array(60,60), //Creates a resized image inside a box with 60x60 pixels and defined background by colors below
         'small'=>array(100,100),
@@ -80,7 +80,6 @@ echo $this->Thumbs->get('img/one.jpg')->resize('small'); //resizes using small s
 echo $this->Thumbs->get('img/one.jpg')->fill('small','red'); //Creates the resized imagem using small size and red background
 echo $this->Thumbs->get('img/one.jpg')->fill('small','alpha_blue'); //Creates the resized imagem using small size and blue background with 30% alpha
 ```
-
 
 
 

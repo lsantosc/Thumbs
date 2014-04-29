@@ -31,15 +31,21 @@ class Thumbclass {
     }
 
     public function fill($width,$height,$fillColor){
-        $alpha = is_numeric(substr($fillColor,7,3))?substr($color,7,3):100;
-        $fillColor = '#'.substr($fillColor,0,6);
         $this->width = $width;
         $this->height = $height;
         $this->imagick->scaleimage($width,$height,true);
-        $this->imagick->setimagebackgroundcolor($fillColor);
+        $this->imagick->setimagebackgroundcolor($this->hexToRGB($fillColor));
         $w = $this->imagick->getImageWidth();
         $h = $this->imagick->getImageHeight();
         $this->imagick->extentimage($this->width,$this->height,($w-$this->width)/2,($h-$this->height)/2);
+    }
+
+    public function hexToRGB($color){
+        $r = hexdec(substr($color,0,2));
+        $g = hexdec(substr($color,2,2));
+        $b = hexdec(substr($color,4,2));
+        $a = is_numeric(substr($color,7,3))?substr($color,7,3)/100:100/100;
+        return "rgba($r,$g,$b,$a)";
     }
 
     public function show($path = false){
