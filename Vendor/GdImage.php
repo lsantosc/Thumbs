@@ -8,12 +8,7 @@ class GdImage{
 
     public function load($input){
         $this->mime = image_type_to_mime_type(exif_imagetype($input));
-        switch($this->mime){
-            case "image/jpeg": $this->image=imagecreatefromjpeg($input); break;
-            case "image/png": $this->image=imagecreatefrompng($input); break;
-            case "image/gif": $this->image=imagecreatefromgif($input); break;
-            default: $this->image = @imagecreatefromstring(file_get_contents($input));
-        }
+        $this->image = @imagecreatefromstring(file_get_contents($input));
         $this->width = imagesx($this->image);
         $this->height = imagesy($this->image);
     }
