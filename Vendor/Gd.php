@@ -45,9 +45,14 @@ class Thumbclass{
         $b = hexdec(substr($fillColor,4,2));
         $color = imagecolorallocate($new,$r,$g,$b);
         imagefill($new,0,0,$color);
-        $dx = ($width/2)-($this->width/2);
-        $dy = ($height/2) - ($this->height/2);
-        imagecopymerge($new,$this->image,$dx,$dy,0,0,$this->width,$this->height,100);
+        //$dx = ($width/2)-($this->width/2);
+        //$dy = ($height/2) - ($this->height/2);
+        //imagecopymerge($new,$this->image,$dx,$dy,0,0,$this->width,$this->height,100);
+        $dif_w = (($this->width/$this->height) >= ($width/$height))?$width:$this->width*($height/$height);
+        $dif_h = (($this->width/$this->height) >= ($width/$height))?$this->height*($width/$this->width):$height;
+        $dif_x = (($this->width/$this->height) >= ($width/$height))?0:round(($width-$dif_w)/2);
+        $dif_y = (($this->width/$this->height) >= ($width/$height))?round(($height-$dif_h)/2):0;
+        imagecopyresampled($new,$this->image,$dif_x,$dif_y,0,0,$dif_w,$dif_h,$this->width,$this->height);
         $this->image = $new;
         $this->width = $width;
         $this->height = $height;
