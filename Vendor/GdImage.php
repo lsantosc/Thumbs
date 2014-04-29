@@ -78,11 +78,6 @@ class GdImage{
         exit;
     }
     public function save($destination,$quality = 90){
-
-        ############################################################################################################
-        $this->show();
-
-
         $dir = dirname($destination);
         if(!file_exists($dir)) mkdir($dir,0777,true);
         switch($this->mime){
