@@ -31,7 +31,8 @@ class Thumbclass {
     }
 
     public function fill($width,$height,$fillColor){
-        $fillColor = "#$fillColor";
+        $alpha = is_numeric(substr($fillColor,7,3))?substr($color,7,3):100;
+        $fillColor = '#'.substr($fillColor,0,6);
         $this->width = $width;
         $this->height = $height;
         $this->imagick->scaleimage($width,$height,true);
