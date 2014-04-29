@@ -21,5 +21,4 @@ class ThumbsHelper extends AppHelper{
         return $this->Html->image("/thumbs/generate/fill/{$fill}/{$size}/{$this->path}");
     }
 
-
 }
