@@ -18,8 +18,7 @@ class GenerateController extends ThumbsAppController{
         if(!file_exists($path)) return false;
         $mime = image_type_to_mime_type(exif_imagetype($path));
         header("Content-Type: {$mime}");
-        echo file_get_contents($path);
-        exit;
+        exit(file_get_contents($path));
     }
 
     public function crop(){

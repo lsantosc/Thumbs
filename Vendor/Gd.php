@@ -40,17 +40,25 @@ class Thumbclass{
     public function fill($width,$height,$fillColor){
         $this->resize($width,$height);
         $new = $this->create($width,$height);
-        $r = hexdec(substr($fillColor,0,2));
-        $g = hexdec(substr($fillColor,2,2));
-        $b = hexdec(substr($fillColor,4,2));
-        $color = imagecolorallocate($new,$r,$g,$b);
-        imagefill($new,0,0,$color);
+        $color = $this->hexToRGB($fillColor);
+        $alpha = 127-intval(($color['alpha']/100)*127);
+        $color = imagecolorallocatealpha($new,$color['red'],$color['green'],$color['blue'],$alpha);
         $dx = ($width/2)-($this->width/2);
         $dy = ($height/2) - ($this->height/2);
+        imagefill($new,0,0,$color);
         imagecopymerge($new,$this->image,$dx,$dy,0,0,$this->width,$this->height,100);
         $this->image = $new;
         $this->width = $width;
         $this->height = $height;
+        $this->show();
+    }
+
+    public function hexToRGB($color){
+        $r = hexdec(substr($color,0,2));
+        $g = hexdec(substr($color,2,2));
+        $b = hexdec(substr($color,4,2));
+        $a = is_numeric(substr($color,7,3))?substr($color,7,3):100;
+        return array('red'=>$r,'green'=>$g,'blue'=>$b,'alpha'=>$a);
     }
 
     public function show($path = false){
@@ -67,6 +75,8 @@ class Thumbclass{
     }
 
     public function create($width,$height){
+        imagesavealpha($this->image,true);
+        imagealphablending($this->image,true);
         $image = imagecreatetruecolor($width,$height);
         $alpha = imagecolorallocatealpha($image,0,0,0,127);
         imagealphablending($image,true);
