@@ -73,13 +73,6 @@ class Thumbclass{
         return $image;
     }
 
-    public function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){
-        $cut = imagecreatetruecolor($src_w, $src_h);
-        imagecopy($cut, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
-        imagecopy($cut, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h);
-        imagecopymerge($dst_im, $cut, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct);
-    }
-
     public function show($path = false){
         if($path) $this->load($path);
         header("Content-Type: {$this->mime}");
