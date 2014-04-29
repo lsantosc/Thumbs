@@ -1,5 +1,5 @@
 <?PHP
-class GdImage{
+class Thumbclass{
 
     public $image;
     public $width;
@@ -53,7 +53,8 @@ class GdImage{
         $this->height = $height;
     }
 
-    public function show(){
+    public function show($path = false){
+        if($path) $this->load($path);
         header("Content-Type: {$this->mime}");
         switch($this->mime){
             case "image/jpeg": imagejpeg($this->image); break;
