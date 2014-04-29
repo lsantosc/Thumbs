@@ -7,10 +7,15 @@ class GdImage{
     public $mime;
 
     public function load($input){
-        $this->image = imagecreatefromstring(file_get_contents($input));
+        $this->mime = image_type_to_mime_type(exif_imagetype($input));
+        switch($this->mime){
+            case "image/jpeg": $this->image=imagecreatefromjpeg($input); break;
+            case "image/png": $this->image=imagecreatefrompng($input); break;
+            case "image/gif": $this->image=imagecreatefromgif($input); break;
+            default: $this->image = @imagecreatefromstring(file_get_contents($input));
+        }
         $this->width = imagesx($this->image);
         $this->height = imagesy($this->image);
-        $this->mime = image_type_to_mime_type(exif_imagetype($input));
     }
 
     public function crop($width,$height){
@@ -69,10 +74,9 @@ class GdImage{
         if(!file_exists($dir)) mkdir($dir,0777,true);
         switch($this->mime){
             case "image/jpeg": imagejpeg($this->image,$destination,$quality); break;
-            case "image/png": imagepng($this->image,$destination,$quality); break;
+            case "image/png": imagepng($this->image,$destination); break;
             case "image/gif": imagegif($this->image,$destination); break;
             default: imagepng($this->image,$destination,$quality); break;
         }
     }
-
 }
