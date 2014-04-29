@@ -76,8 +76,8 @@ In the view:
 echo $this->Thumbs->get('img/one.jpg')->crop('tiny'); //Crop using tiny size
 echo $this->Thumbs->get('img/one.jpg')->crop('small'); //Crop using small size
 echo $this->Thumbs->get('img/one.jpg')->resize('small'); //resizes using small size
-echo $this->Thumbs->get('img/one.jpg')->fill('small',red); //Creates the resized imagem using small size and red background
-echo $this->Thumbs->get('img/one.jpg')->fill('small',alpha_blue); //Creates the resized imagem using small size and blue background with 30% alpha
+echo $this->Thumbs->get('img/one.jpg')->fill('small','red'); //Creates the resized imagem using small size and red background
+echo $this->Thumbs->get('img/one.jpg')->fill('small','alpha_blue'); //Creates the resized imagem using small size and blue background with 30% alpha
 ```
 
 
