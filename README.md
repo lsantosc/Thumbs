@@ -2,7 +2,8 @@ Thumbs
 ======
 
 Thumbs plugin for CakePHP 2.x<br>
-This plugin allows you to create thumbs from any image on your website, it also creates a cache for each generated thumb.
+This plugin allows you to create thumbs from any image on your website, it also creates a cache for each generated thumb. It uses Gd library
+or Imagick library (Automatically selected) for thumbs creation. So one of them you will need to have installed.
 
 #Getting started
 First fork this plugin into your CakePHP 2.x project, then load this plugin into your bootstrap.php file
