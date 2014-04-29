@@ -8,10 +8,18 @@ class GenerateController extends ThumbsAppController{
     public function __construct($request = null, $response = null) {
         parent::__construct($request, $response);
         $this->config = $this->readConfig($request);
+        $this->output($this->config['thumb']);
         if(extension_loaded('Imagick') && class_exists('Imagick')) App::import('Vendor','Thumbs.Imagick');
         else App::import('Vendor','Thumbs.Gd');
         $this->Image = new Thumbclass();
-        if(file_exists($this->config['thumb'])) $this->Image->show($this->config['thumb']);
+    }
+
+    private function output($path){
+        if(!file_exists($path)) return false;
+        $mime = image_type_to_mime_type(exif_imagetype($path));
+        header("Content-Type: {$mime}");
+        echo file_get_contents($path);
+        exit;
     }
 
     public function crop(){
