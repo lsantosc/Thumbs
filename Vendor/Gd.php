@@ -1,5 +1,5 @@
 <?PHP
-class Thumbclass{
+class GdHandler{
 
     public $image;
     public $width;
@@ -28,8 +28,8 @@ class Thumbclass{
         $this->height=$height;
     }
 
-    public function resize($width,$height,$type='max'){
-        $diff = $type=='min'?min($this->width/$width,$this->height/$height):max($this->width/$width,$this->height/$height);
+    public function resize($size,$method='width'){
+        $diff = $method=='width'?$this->width/$size:$this->height/$size;
         $dw = floor($this->width/$diff);
         $dh = floor($this->height/$diff);
         $new = $this->create($dw,$dh);
@@ -40,7 +40,13 @@ class Thumbclass{
     }
 
     public function fill($width,$height,$fillColor){
-        $this->resize($width,$height);
+        $diff = max($this->width/$width,$this->height/$height);
+        $dw = floor($this->width/$diff);
+        $dh = floor($this->height/$diff);
+         $temp = $this->create($dw,$dh);
+        imagecopyresampled($temp,$this->image,0,0,0,0,$dw,$dh,$this->width,$this->height);
+        $this->width = $dw;
+        $this->height = $dh;
         $new = $this->create($width,$height);
         $color = $this->hexToRGB($fillColor);
         $alpha = 127-intval(($color['alpha']/100)*127);
@@ -48,7 +54,7 @@ class Thumbclass{
         $dx = ($width/2)-($this->width/2);
         $dy = ($height/2) - ($this->height/2);
         imagefill($new,0,0,$color);
-        imagecopyresampled($new,$this->image,$dx,$dy,0,0,$this->width,$this->height,$this->width,$this->height);
+        imagecopyresampled($new,$temp,$dx,$dy,0,0,$this->width,$this->height,$this->width,$this->height);
         $this->image = $new;
         $this->width = $width;
         $this->height = $height;

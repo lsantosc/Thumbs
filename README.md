@@ -17,27 +17,33 @@ return array(
         'small'=>array(100,100),
     ),
     'resize'=>array(
-        'tiny'=>array(100,100), //Creates a resized imagem with 100px of maximum width or 100px of maximum height
-        'small'=>array(300,300),
+        'tiny'=>100, //Creates a resized imagem with 100px of maximum width or 100px of maximum height, defined in url
+        'small'=>300,
     ),
     'fill'=>array(
-        'tiny'=>array(60,60), //Creates a resized image inside a box with 60x60 pixels and defined background by colors below
-        'small'=>array(100,100),
-        'medium'=>array(200,200),
-    ),
-    'color'=>array(
-        'red'=>'FF0000', //Red color for fill method
-        'green'=>'00FF00',
-        'alpha_blue'=>'0000FF/30', //Blue color with alpha = 30% for fill method
+        'sizes'=>array(
+            'tiny'=>array(60,60), //Creates a resized image inside a box with 60x60 pixels and defined background by colors below
+            'small'=>array(100,100),
+            'medium'=>array(200,200),
+        ),
+        'colors'=>array( //allowed color for fill method
+            'red'=>'FF0000', //Red color
+            'white'=>'FFFFFF',
+            'alpha_red'=>'FF0000/50', //Background will have 50% of alpha, can set to /0 for fully transparent. (PNG only, jpg will have red background without transparency)
+        ),
     ),
 );
 ```
 
 These will be the availiable sizes for each thumb method, the methods availiables are crop, resize and fill. Also the availiable colors for fill method.
 
-1. Crop method will genereate a thumb cropping from the center of the image and the result thumbnail will be an image with exactly size you define
-2. Resize method will resize proportional width and height of the image. The result will be an image wich it´s size will be the maximum defined width or maximum define height of the size, and it´s size will be proportional of the original image.
-3. Fill method will output a proportional resized image to the original but will fill the rest of the image with a defined collor to create a thumbnail with exactly user defined sizes but with proportional resized imagem surounded by the fill color
+1. Crop method will genereate a thumb cropping from the center of the image and the result thumbnail will be an image with exactly size you define<br>
+URL example: <strong>http://www.mysite.com/thumbs/crop/small/img/logotype.png</strong> generates a 100x100 croped thumb
+2. Resize method will resize proportional width and height of the image. The result will be an image wich it´s size will be the maximum defined width or maximum define height of the size, and it´s size will be proportional of the original image.<br>
+URL example (width): <strong>http://www.mysite.com/thumbs/resize/small/width/img/logotype.png</strong> creates a resized image with maximum width of 100px<br>
+URL example (height): <strong>http://www.mysite.com/thumbs/resize/small/height/img/logotype.png</strong> creates a resized image with maximum height of 100px.
+3. Fill method will output a proportional resized image to the original but will fill the rest of the image with a defined collor to create a thumbnail with exactly user defined sizes but with proportional resized imagem surounded by the fill color.<br>
+URL example: <strong>http://www.mysite.com/thumbs/fill/small/red/img/logotype.png</strong> will create a resized image inside a red box with 100x100 pixels of size.
  
 #how to use?
 Now you´ve defined the allowed sizes you can generate your thumbs by using URL´s
@@ -76,9 +82,10 @@ In the view:
 ``` PHP
 echo $this->Thumbs->get('img/one.jpg')->crop('tiny'); //Crop using tiny size
 echo $this->Thumbs->get('img/one.jpg')->crop('small'); //Crop using small size
-echo $this->Thumbs->get('img/one.jpg')->resize('small'); //resizes using small size
+echo $this->Thumbs->get('img/one.jpg')->resize('small','width'); //resizes using small size using max width for the size
+echo $this->Thumbs->get('img/one.jpg')->resize('small','height'); //resizes using small size using max height for the size
 echo $this->Thumbs->get('img/one.jpg')->fill('small','red'); //Creates the resized imagem using small size and red background
-echo $this->Thumbs->get('img/one.jpg')->fill('small','alpha_blue'); //Creates the resized imagem using small size and blue background with 30% alpha
+echo $this->Thumbs->get('img/one.jpg')->fill('small','alpha_red'); //Creates the resized imagem using small size and blue background with 30% alpha
 ```
 
 

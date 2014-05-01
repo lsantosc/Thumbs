@@ -1,12 +1,11 @@
 <?PHP
-class Thumbclass {
+class ImagickHandler {
 
     private $imagick;
 
     public $width;
     public $height;
     public $mime;
-
 
     public function load($input){
         $this->imagick = new Imagick($input);
@@ -21,9 +20,10 @@ class Thumbclass {
         $this->height=$height;
     }
 
-    public function resize($width,$height){
-        $width = ($width>$height)?$width:0;
-        $height = ($height>$width)?$height:0;
+    public function resize($size,$method='width'){
+        $diff = $method=='width'?$this->width/$size:$this->height/$size;
+        $width = floor($this->width/$diff);
+        $height = floor($this->height/$diff);
         $this->imagick->thumbnailimage($width,$height);
         $this->width = $this->imagick->getimagewidth();
         $this->height = $this->imagick->getimageheight();

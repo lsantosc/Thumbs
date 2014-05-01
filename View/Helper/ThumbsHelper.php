@@ -10,15 +10,15 @@ class ThumbsHelper extends AppHelper{
     }
 
     public function crop($size,$options=array()){
-        return $this->Html->image("/thumbs/generate/crop/{$size}/{$this->path}",$options);
+        return $this->Html->image("/thumbs/crop/{$size}/{$this->path}",$options);
     }
 
-    public function resize($size,$options=array()){
-        return $this->Html->image("/thumbs/generate/resize/{$size}/{$this->path}",$options);
+    public function resize($size,$method='width',$options=array()){
+        return $this->Html->image("/thumbs/resize/{$size}/{$method}/{$this->path}",$options);
     }
 
     public function fill($size,$fill,$options=array()){
-        return $this->Html->image("/thumbs/generate/fill/{$fill}/{$size}/{$this->path}",$options);
+        return $this->Html->image("/thumbs/fill/{$size}/{$fill}/{$this->path}",$options);
     }
 
 }

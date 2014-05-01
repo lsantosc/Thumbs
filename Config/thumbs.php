@@ -1,22 +1,31 @@
 <?PHP
 return array(
     'crop'=>array(
-        'tiny'=>array(50,50),
+        'tiny'=>array(60,60),
         'small'=>array(100,100),
         'medium'=>array(200,200),
+        'large'=>array(1000,1000),
     ),
     'resize'=>array(
-        'tiny'=>array(100,100),
-        'small'=>array(300,300),
-        'medium'=>array(600,600),
+        'tiny'=>100,
+        'small'=>300,
+        'medium'=>600,
+        'large'=>1000,
     ),
     'fill'=>array(
-        'tiny'=>array(50,50),
-        'small'=>array(100,100),
-        'medium'=>array(200,200),
-    ),
-    'colors'=>array(
-        'white'=>'FFFFFF',
-        'black'=>'000000',
+        'sizes'=>array(
+            'tiny'=>array(60,60),
+            'small'=>array(100,100),
+            'medium'=>array(200,200),
+            'large'=>array(1000,1000),
+        ),
+        'colors'=>array(
+            'transparent'=>'FFFFFF/0', //Only for PNG (JPG will have white background)
+            'black'=>'000000',
+            'white'=>'FFFFFF',
+            'red'=>'FF0000',
+            'green'=>'00FF00',
+            'blue'=>'0000FF',
+        ),
     ),
 );
