@@ -5,7 +5,6 @@ class CropRoute extends ThumbsAppRoute{
     public function parse($url) {
         $url = parent::parse($url);
         if(empty($url)) return false;
-        if($url['action'] == 'cached') return $url;
 
         $size = @$this->config[$url['action']][$url['size']];
         if(empty($size)) return false;
