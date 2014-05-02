@@ -4,11 +4,6 @@ class ImagickHandler extends Engines {
 
     private $imagick;
 
-    public $width;
-    public $height;
-    public $mime;
-
-
     public function load($input){
         $this->imagick = new Imagick($input);
         $this->width = $this->imagick->getimagewidth();
