@@ -6,12 +6,16 @@ class ImagickHandler {
     public $width;
     public $height;
     public $mime;
+    public $modified;
+    public $etag;
 
     public function load($input){
         $this->imagick = new Imagick($input);
         $this->width = $this->imagick->getimagewidth();
         $this->height = $this->imagick->getimageheight();
         $this->mime = $this->imagick->getimagemimetype();
+        $this->modified = filemtime($input);
+        $this->etag = md5_file($input);
     }
 
     public function crop($width,$height){
@@ -50,7 +54,16 @@ class ImagickHandler {
 
     public function show($path = false){
         if($path) $this->load($path);
+        $ifetag = (isset($_SERVER['HTTP_IF_NONE_MATCH']))?trim($_SERVER['HTTP_IF_NONE_MATCH']):false;
+        $ifmodified = (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']))?$_SERVER['HTTP_IF_MODIFIED_SINCE']:false;
         header("Content-type: {$this->mime}");
+        header("Cache-Control: public");
+        header("Etag: {$this->etag}");
+        header("Last-Modified: ".gmdate("D, d M Y H:i:s", $this->modified)." GMT");
+        if((!empty($ifmodified) && @strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) === $this->modified) || (!empty($ifetag) && $ifetag == $this->etag)){
+            header("HTTP/1.1 304 Not Modified");
+            exit;
+        }
         echo $this->imagick->getimage();
         $this->imagick->destroy();
         exit;

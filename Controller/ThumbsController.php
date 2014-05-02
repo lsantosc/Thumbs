@@ -1,11 +1,11 @@
 <?php
 class ThumbsController extends ThumbsAppController{
 
-    private $Image;
+    private $Image; // NOT USED
     protected $config;
     public $autoRender = false;
 
-
+    // NOT USED
     private function output($path){
         if(!file_exists($path)) return false;
         $mime = image_type_to_mime_type(exif_imagetype($path));
@@ -50,9 +50,17 @@ class ThumbsController extends ThumbsAppController{
         $engine->show();
     }
 
+    // NOT USED
     public function cached(){
         $config = $this->request->params['image'];
+        $ifetag=(isset($_SERVER['HTTP_IF_NONE_MATCH']) ? trim($_SERVER['HTTP_IF_NONE_MATCH']) : false);
         header("Content-Type: {$config['mime']}");
+        header("Cache-Control: public");
+        header("Last-Modified: ".gmdate("D, d M Y H:i:s", $config['modified'])." GMT");
+        if(@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) === $config['modified'] || $ifetag == $config['md5']) {
+            header("HTTP/1.1 304 Not Modified");
+            exit;
+        }
         echo file_get_contents($config['thumb']);
         exit;
     }
