@@ -1,7 +1,6 @@
 <?php
 class ThumbsController extends ThumbsAppController{
 
-    private $Image;
     protected $config;
     public $autoRender = false;
 
@@ -52,10 +51,14 @@ class ThumbsController extends ThumbsAppController{
 
     public function cached(){
         $config = $this->request->params['image'];
-        //$filemtime = filemtime($config['path']);
-        //header("Etag: $filemtime");
-        //header("HTTP/1.1 304 Not Modified");
+        $ifetag=(isset($_SERVER['HTTP_IF_NONE_MATCH']) ? trim($_SERVER['HTTP_IF_NONE_MATCH']) : false);
         header("Content-Type: {$config['mime']}");
+        header("Cache-Control: public");
+        header("Last-Modified: ".gmdate("D, d M Y H:i:s", $config['modified'])." GMT");
+        if(@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) === $config['modified'] || $ifetag == $config['md5']) {
+            header("HTTP/1.1 304 Not Modified");
+            exit;
+        }
         echo file_get_contents($config['thumb']);
         exit;
     }
