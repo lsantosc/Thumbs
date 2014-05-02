@@ -52,6 +52,9 @@ class ThumbsController extends ThumbsAppController{
 
     public function cached(){
         $config = $this->request->params['image'];
+        $filemtime = filemtime($config['path']);
+        header("Etag: $filemtime");
+        header("HTTP/1.1 304 Not Modified");
         header("Content-Type: {$config['mime']}");
         echo file_get_contents($config['thumb']);
         exit;
