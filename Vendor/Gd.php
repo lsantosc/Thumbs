@@ -80,7 +80,7 @@ class GdHandler extends Engines {
     public function show($path = false){
         if($path) $this->load($path);
         header("Content-Type: {$this->mime}");
-
+        $this->cache();
         switch($this->mime){
             case "image/jpeg": imagejpeg($this->image); break;
             case "image/png": imagepng($this->image); break;
