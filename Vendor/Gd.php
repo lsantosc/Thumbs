@@ -1,6 +1,10 @@
 <?PHP
-App::import('Vendor','Thumbs.Engines');
-class GdHandler extends Engines {
+class GdHandler{
+
+    public $image;
+    public $width;
+    public $height;
+    public $mime;
 
     public function load($input){
         $this->mime = image_type_to_mime_type(exif_imagetype($input));
@@ -9,8 +13,6 @@ class GdHandler extends Engines {
         imagealphablending($this->image,true);
         $this->width = imagesx($this->image);
         $this->height = imagesy($this->image);
-        $this->modified = filemtime($input);
-        $this->etag = md5_file($input);
     }
 
     public function crop($width,$height){
@@ -80,7 +82,6 @@ class GdHandler extends Engines {
     public function show($path = false){
         if($path) $this->load($path);
         header("Content-Type: {$this->mime}");
-        $this->cache();
         switch($this->mime){
             case "image/jpeg": imagejpeg($this->image); break;
             case "image/png": imagepng($this->image); break;
