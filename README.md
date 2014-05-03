@@ -6,7 +6,11 @@ This plugin allows you to create thumbs from any image on your website, it also 
 or Imagick library (Automatically selected) for thumbs creation. So one of them you will need to have installed.
 
 #Getting started
-First fork this plugin into your CakePHP 2.x project, then load this plugin into your bootstrap.php file
+First fork this plugin into your CakePHP 2.x project, then load this plugin into your bootstrap.php file, you will need to load it it´s router (required).
+
+``` PHP
+CakePlugin::load('Thumb',array('routes'=>true));
+```
 
 Then create the file thumbs.php in your app/Config directory, for example:
 
