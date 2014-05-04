@@ -1,16 +1,17 @@
 <?PHP
-App::import('Vendor','Thumbs.Engines');
-class ImagickHandler extends Engines {
+class ImagickHandler {
 
     private $imagick;
+
+    public $width;
+    public $height;
+    public $mime;
 
     public function load($input){
         $this->imagick = new Imagick($input);
         $this->width = $this->imagick->getimagewidth();
         $this->height = $this->imagick->getimageheight();
         $this->mime = $this->imagick->getimagemimetype();
-        $this->modified = filemtime($input);
-        $this->etag = md5_file($input);
     }
 
     public function crop($width,$height){
@@ -50,7 +51,6 @@ class ImagickHandler extends Engines {
     public function show($path = false){
         if($path) $this->load($path);
         header("Content-type: {$this->mime}");
-        $this->cache();
         echo $this->imagick->getimage();
         $this->imagick->destroy();
         exit;

@@ -6,7 +6,11 @@ This plugin allows you to create thumbs from any image on your website, it also 
 or Imagick library (Automatically selected) for thumbs creation. So one of them you will need to have installed.
 
 #Getting started
-First fork this plugin into your CakePHP 2.x project, then load this plugin into your bootstrap.php file
+First fork this plugin into your CakePHP 2.x project, then load this plugin into your bootstrap.php file, you will need to load it it´s router (required).
+
+``` PHP
+CakePlugin::load('Thumb',array('routes'=>true));
+```
 
 Then create the file thumbs.php in your app/Config directory, for example:
 
@@ -88,5 +92,17 @@ echo $this->Thumbs->get('img/one.jpg')->fill('small','red'); //Creates the resiz
 echo $this->Thumbs->get('img/one.jpg')->fill('small','alpha_red'); //Creates the resized imagem using small size and blue background with 30% alpha
 ```
 
+#Cache
+The cache files will be created insite tmp directory (/app/tmp/thumbs/...), but if you want to create the cache on webroot´s directory you just
+need to add Configure::write('Thumbs.cache','webroot'); on your bootstrap.php, then the images will be generated at
+/app/webroot/thumbs/...
 
+``` php
+//bootstrap.php
+Configure::write('Thumbs.cache','webroot');
+```
 
+When cache is sent to webroot, the url will access thumb image directly, so image will not be outputed by PHP.<br>
+The good: The generated thumb will not be processed by PHP, so will have faster request time.<br>
+The bad: If the original image is modified, you will need to exclude the thumb manually then cakephp can process the image again and
+recreate the new thumb.
