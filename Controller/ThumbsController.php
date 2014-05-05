@@ -1,21 +1,7 @@
 <?php
 class ThumbsController extends ThumbsAppController{
 
-    private $Image;
-    protected $config;
     public $autoRender = false;
-
-    public function __construct($request = null, $response = null) {
-        parent::__construct($request, $response);
-    }
-
-
-    private function output($path){
-        if(!file_exists($path)) return false;
-        $mime = image_type_to_mime_type(exif_imagetype($path));
-        header("Content-Type: {$mime}");
-        exit(file_get_contents($path));
-    }
 
     private function getEngine(){
         if(extension_loaded('Imagick') && class_exists('Imagick')){
@@ -32,7 +18,7 @@ class ThumbsController extends ThumbsAppController{
         $config = $this->request->params['image'];
         $engine->load($config['path']);
         $engine->crop($config['width'],$config['height']);
-        $engine->save($config['thumb']);
+        if(Configure::read('debug') == 0) $engine->save($config['thumb']);
         $engine->show();
     }
 
@@ -41,7 +27,7 @@ class ThumbsController extends ThumbsAppController{
         $config = $this->request->params['image'];
         $engine->load($config['path']);
         $engine->resize($config['size'],$config['method']);
-        $engine->save($config['thumb']);
+        if(Configure::read('debug') == 0) $engine->save($config['thumb']);
         $engine->show();
     }
 
@@ -49,16 +35,9 @@ class ThumbsController extends ThumbsAppController{
         $engine = $this->getEngine();
         $config = $this->request->params['image'];
         $engine->load($config['path']);
-        $engine->fill($config['width'],$config['height'],$config['fill']);
-        $engine->save($config['thumb']);
+        $engine->fill($config['width'],$config['height'],$config['color']);
+        if(Configure::read('debug') == 0) $engine->save($config['thumb']);
         $engine->show();
-    }
-
-    public function cached(){
-        $config = $this->request->params['image'];
-        header("Content-Type: {$config['mime']}");
-        echo file_get_contents($config['thumb']);
-        exit;
     }
 
 }

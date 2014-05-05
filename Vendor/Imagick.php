@@ -59,6 +59,7 @@ class ImagickHandler {
     public function save($destination,$quality = 90){
         $dir = dirname($destination);
         if(!file_exists($dir)) mkdir($dir,0777,true);
+        if(!is_writable($dir)) return false;
         $this->imagick->setcompression(Imagick::COMPRESSION_JPEG);
         $this->imagick->setcompressionquality($quality);
         $this->imagick->writeimage($destination);

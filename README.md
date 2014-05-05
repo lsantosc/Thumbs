@@ -1,26 +1,26 @@
-Thumbs
+Thumbs plugin for CakePHP 2.x
 ======
 
-Thumbs plugin for CakePHP 2.x<br>
-This plugin allows you to create thumbs from any image on your website, it also creates a cache for each generated thumb. It uses Gd library
-or Imagick library (Automatically selected) for thumbs creation. So one of them you will need to have installed.
+This plugin allows you to create thumbs from any public image on your website.
 
 #Getting started
-First fork this plugin into your CakePHP 2.x project, then load this plugin into your bootstrap.php file, you will need to load it it´s router (required).
+1. First fork or clone this plugin into your CakePHP 2.x project;
+2. Load this plugin into your bootstrap.php file with plugin´s router.
 
 ``` PHP
 CakePlugin::load('Thumb',array('routes'=>true));
 ```
 
-Then create the file thumbs.php in your app/Config directory, for example:
+Then create the file thumbs.php in your Config directory (app/Config/thumbs.php), if you dont create, you can use predefined one from plugin´s directory.<br>
+Example of thumbs.php configuration file:
 
 ``` PHP
 return array(
-    'crop'=>array(
+    'crop'=>array( //Avaliable sizes for CROP method
         'tiny'=>array(60,60), //Creates a crop thumb 60x60px
-        'small'=>array(100,100),
+        'small'=>array(100,100), //Creates a crop thumb 100x100px
     ),
-    'resize'=>array(
+    'resize'=>array( //Avaliable sizes for RESIZE method
         'tiny'=>100, //Creates a resized imagem with 100px of maximum width or 100px of maximum height, defined in url
         'small'=>300,
     ),
@@ -39,36 +39,27 @@ return array(
 );
 ```
 
-These will be the availiable sizes for each thumb method, the methods availiables are crop, resize and fill. Also the availiable colors for fill method.
+#How to generate thumbnails?
+You can generate thumbnails using the url, there are three methods avaliable for thumbs generation as can viewed on the configuration
+file abobe (crop, resize and fill).
 
-1. Crop method will genereate a thumb cropping from the center of the image and the result thumbnail will be an image with exactly size you define<br>
-URL example: <strong>http://www.mysite.com/thumbs/crop/small/img/logotype.png</strong> generates a 100x100 croped thumb
-2. Resize method will resize proportional width and height of the image. The result will be an image wich it´s size will be the maximum defined width or maximum define height of the size, and it´s size will be proportional of the original image.<br>
-URL example (width): <strong>http://www.mysite.com/thumbs/resize/small/width/img/logotype.png</strong> creates a resized image with maximum width of 100px<br>
-URL example (height): <strong>http://www.mysite.com/thumbs/resize/small/height/img/logotype.png</strong> creates a resized image with maximum height of 100px.
-3. Fill method will output a proportional resized image to the original but will fill the rest of the image with a defined collor to create a thumbnail with exactly user defined sizes but with proportional resized imagem surounded by the fill color.<br>
-URL example: <strong>http://www.mysite.com/thumbs/fill/small/red/img/logotype.png</strong> will create a resized image inside a red box with 100x100 pixels of size.
- 
-#how to use?
-Now you´ve defined the allowed sizes you can generate your thumbs by using URL´s
-For example if you have the image at <strong>webroot/img/someimage.jpg</strong>, you can create a crop by using the url <strong>http://www.mysite.com/thumbs/generate/crop/tiny/img/someimage.jpg</strong>. This will generate an image with tiny size (in this case 60x60) cropped from original.
+Just use the url to create the thumbs, for example, if you have an image publicly accessible by the url
+<strong>http://example.com/img/myimage.jpg</strong> and you want to generate a cropped thumb with 100px of width and 100px of height, you can
+generate the thumbnail by accessing <strong>http://example.com/thumbs/crop/small/img/myimage.jpg</strong>, and your crop will be generated.
 
-To understand the URL:
+<strong>To understand the URL:</strong><br>
 
-1. http://www.mysite.com/thumbs/generate => The url for thumbs creation
-2. /crop => The thumb creation method (can also be resize or fill)
-3. /tiny => The thumb size (defined on /app/Config/thumbs.php)
-4. /img/someimage.jpg => the location of the image from webroot´s directory
+http://example.com/thumbs -> URL for thumb creation<br>
 
-For fill method the url should be: <strong>http://www.mysite.com/thumbs/generate/fill/fillcolor/size/path/to/image.png</strong>
+/crop -> Method for crop generation, uses the 'crop' directive on configuration file<br>
+/small -> The size, the plugin will get width and height from configuration file, the first value of the array is the width, and
+the second value is the height.<br>
 
-1. http://www.mysite.com/thumbs/generate => URL for thumbs creation
-2. /fill => Fill creation method
-3. /fillcolor => The color (defined on /app/Config/thumbs.php)
-4. /size => The size of the image (defined on /app/Config/thumbs.php)
-5. /path/to/image.png => The location of the image from webroot´s directory
+/img/myimage.jpg -> The location of image
 
-If a cache does not exists yet, it will be created and saved on tmp directory for latter use, so if you try to generate the same thumb latter, the cache will be used for a better performance.
+<strong>Crop URL</strong> http://mysite.com/thumbs/crop/<strong>&lt;size&gt;</strong>/img/myimage.jpg<br>
+<strong>Resize URL</strong> http://mysite.com/thumbs/resize/<strong>&lt;size&gt;</strong>/<strong>&lt;width or height&gt;</strong>/img/myimage.jpg<br>
+<strong>Fill URL</strong> http://mysite.com/thumbs/fill/<strong>&lt;size&gt;</strong>/<strong>&lt;color&gt;</strong>/img/myimage.jpg<br>
 
 #Helper
 This plugin has a helper to create those url´s, to use the Helper you should call in your controller, or directly on your AppController:
@@ -93,16 +84,13 @@ echo $this->Thumbs->get('img/one.jpg')->fill('small','alpha_red'); //Creates the
 ```
 
 #Cache
-The cache files will be created insite tmp directory (/app/tmp/thumbs/...), but if you want to create the cache on webroot´s directory you just
-need to add Configure::write('Thumbs.cache','webroot'); on your bootstrap.php, then the images will be generated at
-/app/webroot/thumbs/...
+When in production mode (debug = 0) this plugin generates cached images on webroot folder for faster request time, so you will create the thumbnail
+only once time, if you modify the original image latter, you will need to remove cached thumbs for this image manually.
 
+<strong>If you need to exclude the cache from an image</strong> you can use the Thumbs vendor do to it, use the example:
 ``` php
-//bootstrap.php
-Configure::write('Thumbs.cache','webroot');
+App::import('Vendor','Thumbs.Thumbs');
+Thumbs::clear('img/myimage.jpg');
 ```
-
-When cache is sent to webroot, the url will access thumb image directly, so image will not be outputed by PHP.<br>
-The good: The generated thumb will not be processed by PHP, so will have faster request time.<br>
-The bad: If the original image is modified, you will need to exclude the thumb manually then cakephp can process the image again and
-recreate the new thumb.
+It´s very usefull when you change the original image and needs to recreate all thumbnails again, or when you delete a post and delete a
+image related to the post, so thumbnails for that image is not needed anymore and becomes junk, so this command will clear then.
