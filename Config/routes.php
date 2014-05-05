@@ -1,36 +1,11 @@
 <?PHP
-App::import('Lib','Thumbs.CropRoute');
-App::import('Lib','Thumbs.ResizeRoute');
-App::import('Lib','Thumbs.FillRoute');
+App::import('Lib','Thumbs.ThumbsRoute');
 
-//CROP ROUTING
-Router::connect('/thumbs/crop/:size/*',array(
-    'plugin'=>'thumbs',
-    'controller'=>'thumbs',
-    'action'=>'crop'
-),array(
-    'routeClass'=>'CropRoute',
-    'size'=>'[a-zA-Z0-9-_]+',
-));
+$crop = array('plugin'=>'thumbs','controller'=>'thumbs','action'=>'crop');
+$resize = array('plugin'=>'thumbs','controller'=>'thumbs','action'=>'resize');
+$fill = array('plugin'=>'thumbs','controller'=>'thumbs','action'=>'fill');
+$params = array('routeClass'=>'ThumbsRoute','size'=>'[a-zA-Z9-9-_]+','side'=>'(width|height)','color'=>'[a-zA-Z0-9-_]+');
 
-//RESIZE ROUTING
-Router::connect('/thumbs/resize/:size/:side/*',array(
-    'plugin'=>'thumbs',
-    'controller'=>'thumbs',
-    'action'=>'resize',
-),array(
-    'routeClass'=>'ResizeRoute',
-    'side'=>'(width|height)',
-    'size'=>'[a-zA-Z0-9-_]+',
-));
-
-//FILL ROUTING
-Router::connect('/thumbs/fill/:size/:fill/*',array(
-    'plugin'=>'thumbs',
-    'controller'=>'thumbs',
-    'action'=>'fill',
-),array(
-    'routeClass'=>'FillRoute',
-    'fill'=>'[a-zA-Z0-9-_]+',
-    'size'=>'[a-zA-Z0-9]+',
-));
+Router::connect('/thumbs/crop/:size/*',$crop,$params);
+Router::connect('/thumbs/resize/:size/:side/*',$resize,$params);
+Router::connect('/thumbs/fill/:size/:color/*',$fill,$params);

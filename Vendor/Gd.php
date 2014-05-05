@@ -95,6 +95,7 @@ class GdHandler{
     public function save($destination,$quality = 90){
         $dir = dirname($destination);
         if(!file_exists($dir)) mkdir($dir,0777,true);
+        if(!is_writable($dir)) return false;
         switch($this->mime){
             case "image/jpeg": imagejpeg($this->image,$destination,$quality); break;
             case "image/png": imagepng($this->image,$destination); break;
