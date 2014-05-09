@@ -11,3 +11,4 @@ Router::connect('/thumbs/resize/:size/:side/*',$resize,$params);
 Router::connect('/thumbs/fill/:size/:color/*',$fill,$params);
 
 //More one line!!
+//One more!
