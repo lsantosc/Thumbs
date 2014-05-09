@@ -9,6 +9,3 @@ $params = array('routeClass'=>'ThumbsRoute','size'=>'[a-zA-Z9-9-_]+','side'=>'(w
 Router::connect('/thumbs/crop/:size/*',$crop,$params);
 Router::connect('/thumbs/resize/:size/:side/*',$resize,$params);
 Router::connect('/thumbs/fill/:size/:color/*',$fill,$params);
-
-//More one line!!
-//One more!
