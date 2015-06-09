@@ -31,13 +31,16 @@ class ImagickHandler {
     }
 
     public function fill($width,$height,$fillColor){
+        $cx = ($this->width - $width) / 2;
+        $cy = ($this->height - $height) / 2;
+        $this->imagick->cropimage($width, $height, $cx, $cy);
+        $this->imagick->setimagebackgroundcolor($this->hexToRGB($fillColor));
         $this->width = $width;
         $this->height = $height;
-        $this->imagick->scaleimage($width,$height,true);
-        $this->imagick->setimagebackgroundcolor($this->hexToRGB($fillColor));
         $w = $this->imagick->getImageWidth();
         $h = $this->imagick->getImageHeight();
-        $this->imagick->extentimage($this->width,$this->height,($w-$this->width)/2,($h-$this->height)/2);
+        $this->imagick->setgravity(Imagick::GRAVITY_CENTER);
+        $this->imagick->extentimage($this->width,$this->height, -($this->width - $w) / 2, -($this->height - $h) / 2);
     }
 
     public function hexToRGB($color){
