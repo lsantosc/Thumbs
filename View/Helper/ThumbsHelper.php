@@ -9,6 +9,10 @@ class ThumbsHelper extends AppHelper{
         return $this;
     }
 
+    public function rotate($degrees, $options = array()) {
+        return $this->Html->image("/thumbs/rotate/{$degrees}/{$this->path}", $options);
+    }
+
     public function crop($size,$options=array()){
         return $this->Html->image("/thumbs/crop/{$size}/{$this->path}",$options);
     }

@@ -13,6 +13,16 @@ class ThumbsController extends ThumbsAppController{
         }
     }
 
+    public function rotate()
+    {
+        $engine = $this->getEngine();
+        $config = $this->request->params['image'];
+        $engine->load($config['path']);
+        $engine->rotate($config['degrees']);
+        if(Configure::read('debug') == 0) $engine->save($config['thumb']);
+        $engine->show();
+    }
+
     public function crop(){
         $engine = $this->getEngine();
         $config = $this->request->params['image'];
