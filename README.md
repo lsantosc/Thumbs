@@ -21,8 +21,12 @@ return array(
         'small'=>array(100,100), //Creates a crop thumb 100x100px
     ),
     'resize'=>array( //Avaliable sizes for RESIZE method
-        'tiny'=>100, //Creates a resized imagem with 100px of maximum width or 100px of maximum height, defined in url
+        'tiny'=>100, //Creates a resized image with 100px of maximum width or 100px of maximum height, defined in url
         'small'=>300,
+    ),
+    'rotate'=>array( //Avaliable degrees for ROTATE method
+        '90' => 90  //Rotates the image in 90 degrees
+        '180' => 180
     ),
     'fill'=>array(
         'sizes'=>array(
@@ -60,6 +64,7 @@ the second value is the height.<br>
 <strong>Crop URL</strong> http://mysite.com/thumbs/crop/<strong>&lt;size&gt;</strong>/img/myimage.jpg<br>
 <strong>Resize URL</strong> http://mysite.com/thumbs/resize/<strong>&lt;size&gt;</strong>/<strong>&lt;width or height&gt;</strong>/img/myimage.jpg<br>
 <strong>Fill URL</strong> http://mysite.com/thumbs/fill/<strong>&lt;size&gt;</strong>/<strong>&lt;color&gt;</strong>/img/myimage.jpg<br>
+<strong>Rotate URL</strong> http://mysite.com/rotate/<strong>&lt;degrees&gt;</strong>/img/myimage.jpg<br>
 
 #Helper
 This plugin has a helper to create those url´s, to use the Helper you should call in your controller, or directly on your AppController:
@@ -79,8 +84,9 @@ echo $this->Thumbs->get('img/one.jpg')->crop('tiny'); //Crop using tiny size
 echo $this->Thumbs->get('img/one.jpg')->crop('small'); //Crop using small size
 echo $this->Thumbs->get('img/one.jpg')->resize('small','width'); //resizes using small size using max width for the size
 echo $this->Thumbs->get('img/one.jpg')->resize('small','height'); //resizes using small size using max height for the size
-echo $this->Thumbs->get('img/one.jpg')->fill('small','red'); //Creates the resized imagem using small size and red background
-echo $this->Thumbs->get('img/one.jpg')->fill('small','alpha_red'); //Creates the resized imagem using small size and blue background with 30% alpha
+echo $this->Thumbs->get('img/one.jpg')->fill('small','red'); //Creates the resized image using small size and red background
+echo $this->Thumbs->get('img/one.jpg')->fill('small','alpha_red'); //Creates the resized image using small size and blue background with 30% alpha
+echo $this->Thumbs->get('img/one.jpg')->rotate('90'); //Rotate the image in 90 degrees
 ```
 
 #Cache
