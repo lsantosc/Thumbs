@@ -19,7 +19,19 @@ class Thumbs{
         $crops = self::generatedCropsPath($path);
         $resizes = self::generatedResizesPath($path);
         $fills = self::generatedFillsPath($path);
-        return array_merge($crops,$resizes,$fills);
+        $rotate = self::generatedRotatePaths($path);
+        return array_merge($crops,$resizes,$fills, $rotate);
+    }
+
+    public static function generatedRotatePaths($image) {
+        $config = self::getConfig();
+        $config = @$config['rotate'];
+        $paths = array();
+        foreach($config as $k => $value){
+            $path = realpath(WWW_ROOT."thumbs/rotate/$k/$image");
+            if(!empty($path)) $paths[] = $path;
+        }
+        return $paths;
     }
 
     private static function generatedCropsPath($image){
