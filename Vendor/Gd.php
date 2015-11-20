@@ -20,6 +20,15 @@ class GdHandler{
         $this->path = $input;
     }
 
+    public function rotate($degrees)
+    {
+        $image = $this->image;
+        $transColor = imagecolorallocatealpha($image, 255, 255, 255, 127);
+        $image = imagerotate($image, $degrees, $transColor, 1);
+        imagesavealpha($image, true);
+        $this->image = $image;
+    }
+
     public function crop($width,$height) {
         $this->calculateCropPositions($width,$height);
         $new = $this->create($width,$height);
