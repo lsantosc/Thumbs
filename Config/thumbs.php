@@ -12,6 +12,11 @@ return array(
         'medium'=>600,
         'large'=>1000,
     ),
+    'rotate'=>array(
+        '90' => 90,
+        '180' => 180,
+        '270' => 270
+    ),
     'fill'=>array(
         'sizes'=>array(
             'tiny'=>array(60,60),

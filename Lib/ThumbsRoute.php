@@ -17,12 +17,26 @@ class ThumbsRoute extends CakeRoute{
             case "crop": $image = $this->_crop($config,$path,$params,$thumb); break;
             case "resize": $image = $this->_resize($config,$path,$params,$thumb); break;
             case "fill": $image = $this->_fill($config,$path,$params,$thumb); break;
+            case "rotate": $image = $this->_rotate($config, $path, $params, $thumb); break;
         }
 
         if(empty($image)) return false;
         $params['image'] = $image;
         return $params;
 
+    }
+
+    private function _rotate($config, $path, $params, $thumb)
+    {
+        $degrees = @$config['rotate'][$params['degrees']];
+
+        if(empty($degrees)) return false;
+        return array(
+            'mime'=>image_type_to_mime_type(exif_imagetype($path)),
+            'path'=>$path,
+            'thumb'=>$thumb,
+            'degrees' => $degrees
+        );
     }
 
     private function _crop($config,$path,$params,$thumb){

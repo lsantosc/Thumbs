@@ -14,6 +14,11 @@ class ImagickHandler {
         $this->mime = $this->imagick->getimagemimetype();
     }
 
+    public function rotate($degrees) {
+        $this->imagick->rotateimage( new ImagickPixel('none'), $degrees);
+        $this->imagick->trimimage(0);
+    }
+
     public function crop($width,$height){
         $this->imagick->cropthumbnailimage($width,$height);
         $this->width=$width;
