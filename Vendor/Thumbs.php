@@ -10,7 +10,9 @@ class Thumbs{
     public static function clear($image = null){
         $generated = self::generatedThumbsPaths($image);
         foreach($generated as $path){
-            if(!unlink($path)) throw new Exception('Não foi possível excluir a imagem '.$path);
+            if(!unlink($path)) {
+                throw new Exception('Não foi possível excluir a imagem '.$path);
+            }
         }
         return $generated;
     }
