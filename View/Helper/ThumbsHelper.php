@@ -17,6 +17,10 @@ class ThumbsHelper extends AppHelper{
         return $this->Html->image("/thumbs/crop/{$size}/{$this->path}",$options);
     }
 
+    public function prop($size,$options=array()){
+        return $this->Html->image("/thumbs/prop/{$size}/{$this->path}",$options);
+    }
+
     public function resize($size,$method='width',$options=array()){
         return $this->Html->image("/thumbs/resize/{$size}/{$method}/{$this->path}",$options);
     }

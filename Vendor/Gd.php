@@ -38,6 +38,23 @@ class GdHandler{
         $this->height = $height;
     }
 
+    public function prop($width, $height)
+    {
+        $ratio = $this->width/$this->height;
+        if($this->width/$this->height > $ratio) {
+            $dw = $height * $ratio;
+            $dh = $height;
+        } else {
+            $dw = $width;
+            $dh = $width / $ratio;
+        }
+        $new = $this->create($dw, $dh);
+        imagecopyresampled($new, $this->image, 0, 0, 0, 0, $dw, $dh, $this->width, $this->height);
+        $this->image = $new;
+        $this->width = $dw;
+        $this->height = $dh;
+    }
+
     public function resize($size,$method='width'){
         $diff = $method=='width'?$this->width/$size:$this->height/$size;
         $dw = floor($this->width/$diff);
