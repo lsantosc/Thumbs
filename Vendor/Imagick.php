@@ -25,6 +25,13 @@ class ImagickHandler {
         $this->height=$height;
     }
 
+    public function prop($width, $height)
+    {
+        $this->imagick->resizeimage($width,$height,Imagick::FILTER_LANCZOS, 1, true);
+        $this->width = $this->imagick->getimagewidth();
+        $this->height = $this->imagick->getimageheight();
+    }
+
     public function resize($size,$method='width'){
         $diff = $method=='width'?$this->width/$size:$this->height/$size;
         $width = floor($this->width/$diff);
