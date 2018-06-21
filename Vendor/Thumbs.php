@@ -10,17 +10,20 @@ class Thumbs{
     public static function clear($image = null){
         $generated = self::generatedThumbsPaths($image);
         foreach($generated as $path){
-            if(!unlink($path)) throw new Exception('Não foi possível excluir a imagem '.$path);
+            if(!unlink($path)) {
+                throw new Exception('Não foi possível excluir a imagem '.$path);
+            }
         }
         return $generated;
     }
 
     public static function generatedThumbsPaths($path){
         $crops = self::generatedCropsPath($path);
+        $props = self::generatedPropPath($path);
         $resizes = self::generatedResizesPath($path);
         $fills = self::generatedFillsPath($path);
         $rotate = self::generatedRotatePaths($path);
-        return array_merge($crops,$resizes,$fills, $rotate);
+        return array_merge($crops, $props, $resizes, $fills, $rotate);
     }
 
     public static function generatedRotatePaths($image) {
@@ -44,6 +47,18 @@ class Thumbs{
         }
         return $paths;
     }
+
+    private static function generatedPropPath($image){
+        $config = self::getConfig();
+        $config = @$config['prop'];
+        $paths = array();
+        foreach($config as $k=>$value){
+            $path = realpath(WWW_ROOT."thumbs/prop/$k/$image");
+            if(!empty($path)) $paths[] = $path;
+        }
+        return $paths;
+    }
+
 
     private static function generatedResizesPath($image){
         $config = self::getConfig();

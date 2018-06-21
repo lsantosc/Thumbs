@@ -6,6 +6,13 @@ return array(
         'medium'=>array(200,200),
         'large'=>array(1000,1000),
     ),
+    'prop' => array(
+        'tiny'=>array(60,60),
+        'small'=>array(100,100),
+        'medium'=>array(200,200),
+        'large'=>array(1000,1000),
+        'xtra'=>array(1280,1280)
+    ),
     'resize'=>array(
         'tiny'=>100,
         'small'=>300,

@@ -32,6 +32,16 @@ class ThumbsController extends ThumbsAppController{
         $engine->show();
     }
 
+    public function prop()
+    {
+        $engine = $this->getEngine();
+        $config = $this->request->params['image'];
+        $engine->load($config['path']);
+        $engine->prop($config['width'], $config['height']);
+        if(Configure::read('debug') == 0) $engine->save($config['thumb']);
+        $engine->show();
+    }
+
     public function resize(){
         $engine = $this->getEngine();
         $config = $this->request->params['image'];
